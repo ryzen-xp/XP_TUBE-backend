@@ -1,29 +1,36 @@
-import { v2 as cloudinary } from 'cloudinary' ;
-import fs from "fs";
+import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs/promises'; // Import fs/promises for promise-based file operations
 
 cloudinary.config({
-  cloud_name : process.env.CLOUD_NAME ,
-  api_key : process.env.API_KEY ,
-  api_secret : process.env.API_SECRET
+  cloud_name: "dve81igvk",
+  api_key: 377757648551316,
+  api_secret: "KM8LRHgeYJgO5AuGD89YQLvJwCw"
 });
 
+const uploadonCloudinary = async (file_path) => {
+  try {
+    if (!file_path) return null;
 
-const uploadonCloudinary = async(file_path)=>{
+    // Upload the file to Cloudinary
+    const response = await cloudinary.uploader.upload(file_path, { resource_type: 'auto' });
+    console.log("File is uploaded on Cloudinary");
 
-  try{
-    if(!file_path)  return null ;
-    const responce = await cloudinary.uploader.upload(file_path ,{ resource_type : 'auto'});
-    console.log("File is uploaded on l=cloudinary ");
+    // Remove the file using fs.promises.unlink
+    await fs.unlink(file_path);
+    return response;
 
-        fs.unlink(file_path );
-        return responce ;
+  } catch (error) {
+    console.error('Failed to upload file to Cloudinary:', error);
 
+    // Attempt to delete the file even if the upload fails
+    try {
+      await fs.unlink(file_path);
+    } catch (unlinkError) {
+      console.error('Failed to delete the file:', unlinkError);
+    }
+    
+    return null;
   }
-  catch (error){
-    fs.unlink(file_path ) ;    // delete the file becuse of file did not uploade on cloudinary 
-    return null ;
-  }
+};
 
-}
-
-export {uploadonCloudinary} ;
+export { uploadonCloudinary };

@@ -27,11 +27,15 @@
        index : true  
     } ,
 
-    avatar : {
-      type : String , // cloudinary url 
-      require : true ,
+    avatarImage: {
+      type: String, 
+      require: true // cloudinary url 
+    
 
     } ,
+    coverImage: {
+      type: String, // cloudinary url
+  },
     watchHistory : [{
       type : Schema.Types.ObjectId ,
       ref : "Video"
@@ -88,4 +92,4 @@
 
  }
 
- export const User = mongoose.model("User" , userSchema);
+ export   const  User = mongoose.model("User" , userSchema);
