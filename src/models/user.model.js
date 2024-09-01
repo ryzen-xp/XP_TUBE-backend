@@ -15,7 +15,7 @@
     email: {
       type: String ,
       requre: true ,
-      unique : ture  ,
+      unique : true  ,
       lowercase : true ,
       trim: true 
 
@@ -39,7 +39,7 @@
 
     password : {
       type: String  ,
-      require : [ture  , 'Password is  required ']
+      require : [true  , 'Password is  required ']
 
     } ,
 

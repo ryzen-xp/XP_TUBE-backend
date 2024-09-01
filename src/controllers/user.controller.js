@@ -10,6 +10,9 @@ import { ApiResponce } from "../utils/Apiresponse.js";
 
 
 const registerUser =  asyncHandler( async ( req , res)=>{
+   res.status(200).json({
+    status : "ok"
+   })
 
 
 //  get user detailed from frontend 
@@ -28,7 +31,7 @@ const {fullName , email , username , password}  = req.body ;
 console.log("email" , email);
 
 if( [fullName, email , username , password].some((field) => {
-  field?.trim()=== ""
+  field?.trim()=== "";
 })){
 
   throw new ApiError( 400 , "All field are  requires");
@@ -72,7 +75,7 @@ const avatarLocalpath =  req.files?.avatar[0]?.path ;
      }
   
        return  res.status(201).json(
-        new ApiResponce(200 , createsUser , "User registered  successfully !!")
+        new ApiResponce(201 , createsUser , "User registered  successfully !!")
        )
 
 
