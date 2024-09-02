@@ -77,7 +77,7 @@
       email: this.email ,
       username : this.username ,
       fullName : this.fullName
-     },  proccess.env.ACCESS_TOKEN_SECRET ,{ expiresIn :proccess.env.ACCESS_TOKEN_EXPIRY }) ;}
+     },  process.env.ACCESS_TOKEN_SECRET ,{ expiresIn :process.env.ACCESS_TOKEN_EXPIRY }) ;}
 
 
  userSchema.methods.refreshAccessToken = function (){
@@ -85,7 +85,7 @@
   return  jwt.sign({
    _id : this._id ,
   
-  },  proccess.env.REFRESH_TOKEN_SECREAT ,{ expiresIn :proccess.env.REFRESH_TOKEN_EXPIRY }) ;
+  },  process.env.REFRESH_TOKEN_SECREAT ,{ expiresIn :process.env.REFRESH_TOKEN_EXPIRY }) ;
 
      
 
