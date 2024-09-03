@@ -1,6 +1,8 @@
 import { Router } from "express";
 import upload from "../middlewares/multer.middleeware.js"; // Adjust based on your export
-import { registerUser , loginUser } from "../controllers/user.controller.js";
+import { registerUser , loginUser, logoutUser } from "../controllers/user.controller.js";
+import { verifyJWT} from "../middlewares/Auth.middleware.js";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -14,6 +16,8 @@ router.route("/register")
   );
 
 
-  router.route("/login").post(loginUser);
+  router.route("/login").post( loginUser);
+
+  router.route("/logout").post(verifyJWT ,logoutUser);
 
 export  default router;
