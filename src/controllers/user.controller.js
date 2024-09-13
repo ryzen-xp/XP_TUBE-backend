@@ -153,7 +153,7 @@ const logoutUser   =  asyncHandler( async  ( req , res ) =>{
    
 
 });
-
+// Here is refresh Token  that use to  invoke again user 
 const refreshAccessToken  = asyncHandler( async(req, res)=>{
   const incomingRefreshToken =  req.cookie?.refreshToken || req.body?.refreshToken ;
    if(!incomingRefreshToken){
@@ -198,5 +198,102 @@ const refreshAccessToken  = asyncHandler( async(req, res)=>{
   }
 });
 
+// Change corrent  password 
 
-export { registerUser, loginUser , logoutUser ,refreshAccessToken };
+const ChangePassword = asyncHandler( async(req, res)=>{
+     const {oldpassword  , newpassword} =  req.body ;
+     const user = await User.findById(req.user?._id);
+
+     const isPasswordCorrect = await user.isPasswordCorrect(oldpassword);
+     if(!isPasswordCorrect){
+        throw new ApiError(401 , "Invalid old  Password");
+     }
+      
+     user.password = newpassword ;
+     await user.save({validateBeforeSave : false});
+      
+     return  res.status(200).json( new ApiResponse(200 ,{} , "Password Change successefully !"))
+
+
+   
+} );
+
+//  get corrent user 
+const getCurrentUser = asyncHandler(async(req, res) => {
+  return res
+  .status(200)
+  .json(new ApiResponse(
+      200,
+      req.user,
+      "User fetched successfully"
+  ))
+})
+
+// change Profile Photo  
+
+const ChangeProfilePhoto  = asyncHandler ( async(req, res)=>{
+  const filepath = req.file?.path ;
+  if(!filepath){
+    throw new ApiError(401 , " Photo path not get");
+  }
+  const avatar = await uploadonCloudinary(filepath);
+  if(!avatar){
+    throw new ApiError(401 , "file not upladed on  cloudinary server");
+  }
+  const user = await User.findByIdAndUpdate(req.user?._id ,
+    {
+      $set:{
+        avatar: avatar.url
+      }
+    },
+    {new:true}
+  ).select("-password");
+  return res
+  .status(200)
+  .json(
+      new ApiResponse(200, user, "Avatar image updated successfully")
+  )
+  
+
+});
+
+// change user cover image  
+
+const ChangeCoverImage = asyncHandler ( async ( req , res)=>{
+   const coverImageFile =  req.file?.url;
+   if(!coverImageFile){
+    throw new ApiError(401 , " Cover image not  uploded please upload");
+   }
+   const uploadfile = await uploadonCloudinary(coverImageFile);
+   const user  = await User.findByIdAndUpdate(req.user?._id ,{
+    $set:{
+      coverImage : uploadfile.url
+    }
+   }, {
+    new: true
+   }).select("-password");
+    return   res.status(200).json(new ApiResponse(200 ,user , "Cover Image uploaded successefully on server"))
+
+
+})
+
+// Update user profile  data 
+
+const updateUserData = asyncHandler( async( req ,res)=>{
+  const { fullName , email}= req.body ;
+
+  if(!fullName || !email){
+    throw new ApiError(401 , "Invalid Name or Email Id");
+  }
+  const user = await User.findByIdAndUpdate(req.user?._id , {
+    $set:{
+      fullName:fullName ,
+      email: email
+    }
+  }, { new:true}).select("-password");
+
+  return   res.status(200).json(ApiResponse( 200 ,user,  "Update User data successfully !!"));
+});
+
+
+export { registerUser, loginUser , logoutUser ,refreshAccessToken , ChangePassword , getCurrentUser ,ChangeProfilePhoto ,ChangeCoverImage , updateUserData};
