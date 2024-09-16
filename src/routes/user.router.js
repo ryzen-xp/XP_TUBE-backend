@@ -30,6 +30,6 @@ router.route("/register")
   router.route("/up-userdata").post(verifyJWT , updateUserData);
 
 
-  router.route("/pub-video").post(verifyJWT , upload.)
+  // router.route("/pub-video").post(verifyJWT , upload.)
 
 export  default router;
