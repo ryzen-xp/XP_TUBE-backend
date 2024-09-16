@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import { Video } from "../models/video.model";
-import { User } from "../models/user.model";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/Apiresponse";
-import { asyncHandler } from "../utils/asyncHandler";
-import { uploadonCloudinary } from "../utils/Cloudianry";
+import { Video } from "../models/video.model.js";
+import { User } from "../models/user.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/Apiresponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { uploadonCloudinary } from "../utils/Cloudianry.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
@@ -30,14 +30,15 @@ const getAllVideos = asyncHandler(async (req, res) => {
 const publishAVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
+
   if (!title) {
     throw new ApiError(400, "Title is required to upload a video");
   }
 
-  const filePath = req.files?.videoPath?.path;
-  const thumbnailPath = req.files?.thumbnailfile?.path;
+  const filePath = req.files?.videofile?.[0]?.path;
+  const thumbnailPath = req.files?.thumbnailfile?.[0]?.path;
 
-  if (!filePath || !thumbnailPath) {
+  if (!filePath && !thumbnailPath) {
     throw new ApiError(400, "File or thumbnail path not found to upload on Cloudinary");
   }
 
@@ -45,7 +46,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
   const cloudVideo = await uploadonCloudinary(filePath);
   const cloudThumbnail = await uploadonCloudinary(thumbnailPath);
 
-  if (!cloudVideo || !cloudThumbnail) {
+  if (!cloudVideo && !cloudThumbnail) {
     throw new ApiError(500, "Failed to upload files to Cloudinary");
   }
 
@@ -61,11 +62,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
   });
 
 
-  return res.status(200).json(ApiResponse(
-   200,
-     newVideo,
-     "Successfully uploaded video and saved in database"
-  ));
+  return res.status(200).json(new ApiResponse(200, newVideo, "Successfully uploaded video and saved in database"));
+
 });
 
 
