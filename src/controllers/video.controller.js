@@ -27,6 +27,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 });
 
+// publice new  videos on  cloudinary  and  thumbnail  on server  and storeing  url in database  in video schema
+
 const publishAVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
@@ -53,8 +55,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
   // Create a new video entry in the database
   const newVideo = await Video.create({
     title,
-    videoFile: cloudVideo.secure_url,
-    thumbnail: cloudThumbnail.secure_url,
+    videoFile: cloudVideo.url,
+    thumbnail: cloudThumbnail.url,
     description,
     duration: 17, 
     isPublished: true,

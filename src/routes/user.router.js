@@ -3,7 +3,7 @@ import upload from "../middlewares/multer.middleeware.js"; // Adjust based on yo
 import { registerUser , loginUser, logoutUser  , ChangePassword ,ChangeProfilePhoto , getCurrentUser, ChangeCoverImage , getUserChannelProfile, UserHistory, updateUserData} from "../controllers/user.controller.js";
 import { verifyJWT} from "../middlewares/Auth.middleware.js";
 
-import { publishAVideo } from "../controllers/video.controller.js";
+
 
 
 const router = Router();
@@ -30,6 +30,5 @@ router.route("/register")
   router.route("/up-userdata").post(verifyJWT , updateUserData);
 
 
-  // router.route("/pub-video").post(verifyJWT , upload.)
 
 export  default router;
