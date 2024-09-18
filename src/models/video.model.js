@@ -36,10 +36,6 @@ const  videoSchema = new  Schema ({
       ref : "User",
       required : true
      }
-
-
-
-
 }) ;
 
 
