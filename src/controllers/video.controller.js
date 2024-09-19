@@ -10,7 +10,7 @@ import { uploadonCloudinary } from "../utils/Cloudianry.js";
 const getAllVideos = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, query, sortBy = "createdAt", sortType = "asc", userId } = req.query;
 
-  // const user = await User.findById(userId);
+  const user = await User.findById(userId);
   // if (!user) {
   //   throw new ApiError(404, "User not found");
   // }
@@ -53,7 +53,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
     videoFile: cloudVideo.url,
     thumbnail: cloudThumbnail.url,
     description,
-    duration: 17, // Placeholder for actual duration
+    duration: 17, 
     isPublished: true,
     owner: req.user._id,
   });
