@@ -5,7 +5,7 @@ import { type } from "os";
 const commentSchema = new Schema({
   content : {
     type: String , 
-    required : ture 
+    required : true 
   },
   video : {
     type: Schema.Types.ObjectId ,
